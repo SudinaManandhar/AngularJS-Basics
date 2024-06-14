@@ -1,0 +1,15 @@
+<div class="login-container">
+    <h2>Login</h2>
+    <form ng-submit="$ctrl.login()">
+        <div>
+            <label for="username" >Username:</label>
+            <input type="text" id="username" ng-model="$ctrl.credentials.username" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" ng-model="$ctrl.credentials.password" required>
+        </div>
+        <div class="error" ng-if="$ctrl.error">{{ $ctrl.error }}</div>
+        <button type="submit">Login</button>
+    </form>
+</div>

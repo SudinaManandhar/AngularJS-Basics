@@ -1,0 +1,83 @@
+<!-- <head>
+  <link rel="stylesheet" href="employee.css">
+</head> -->
+
+<button ng-click="$ctrl.logout()" class = "logout-btn">Logout</button>
+
+<div class="employee-container">
+    <h2 class = "heading">Employee List</h2>
+
+    <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Address</th>
+              <th scope="col">Contact</th>
+              <th scope="col">Email</th>
+              <th scope="col">View Details</th>
+              <th scope = "col">Edit Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat = "employee in $ctrl.employees">
+              <td>{{ employee.name }}</td>
+              <td>{{ employee.address }}</td>
+              <td>{{ employee.phone }}</td>
+              <td>{{ employee.email }}</td>
+              <td><button class = "btn" ng-click="$ctrl.showDetails(employee)"><i class="fas fa-eye"></i></button></td>
+              <td><button class = "btn" ng-click="$ctrl.editDetails(employee)"><i class="fas fa-pen"></i></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+</div>
+
+
+
+<div ng-if="$ctrl.showEditForm">
+  <employee-edit employee="$ctrl.selectedEmployee" on-save="$ctrl.saveEmployee(employee)"></employee-edit>
+</div>
+
+<div id="employeeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="employeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="employeeModalLabel">Employee Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <table class="table table-bordered">
+                  <tbody>
+                      <tr>
+                          <th scope="row">Name</th>
+                          <td>{{ $ctrl.selectedEmployee.name }}</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Address</th>
+                          <td>{{ $ctrl.selectedEmployee.address }}</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Contact</th>
+                          <td>{{ $ctrl.selectedEmployee.phone }}</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Email</th>
+                          <td>{{ $ctrl.selectedEmployee.email }}</td>
+                      </tr>
+                      <tr>
+                          <th scope="row">Position</th>
+                          <td>{{ $ctrl.selectedEmployee.position }}</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+

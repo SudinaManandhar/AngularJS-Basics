@@ -1,0 +1,26 @@
+{
+    "employees": [
+        { 
+            "name": "John Doe", 
+            "position": "Developer",
+            "address": "Raniban",
+            "phone": 9893289823,
+            "email": "johndoe@gmail.com"
+        },
+        { 
+            "name": "Jane Doe", 
+            "position": "Designer",
+            "address": "Teku",
+            "phone": 989234823,
+            "email": "janedoe@gmail.com"
+        },
+        { 
+            "name": "Mark Smith", 
+            "position": "Manager",
+            "address": "Chitwan",
+            "phone": 9823123823,
+            "email": "marksmith@gmail.com"
+        }
+    ]
+}
+
