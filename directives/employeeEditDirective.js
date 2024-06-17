@@ -19,7 +19,7 @@ app.directive('employeeEdit', function() {
                     </div>
                     <div class = "form-group">
                     <label>Contact:</label>
-                    <input type="number" ng-model="employee.phone" required>
+                    <input type="text" ng-model="employee.phone" required>
                     </div>
                     <div class = "form-group">
                     <label>Email:</label>

@@ -1,5 +1,21 @@
 var app = angular.module('myApp', ['ngRoute']);
 
+app.run(function(IndexedDBService, AuthService) {
+    IndexedDBService.initDB().then(function() {
+        console.log('IndexedDB initialized');
+        AuthService.initAuthState();
+
+        // IndexedDBService.addInitialData().then(function() {
+        //     console.log('Initial data added to IndexedDB');
+        // }).catch(function(error) {
+        //     console.error('Error adding initial data to IndexedDB:', error);
+        // });
+
+    }).catch(function(error) {
+        console.error('Error initializing IndexedDB:', error);
+    });
+});
+
 app.config(function($routeProvider, $locationProvider) {
     // $locationProvider.html5Mode({
     //     enabled: true,

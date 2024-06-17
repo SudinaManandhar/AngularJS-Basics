@@ -3,16 +3,34 @@ angular.module('myApp').component('employees', {
     controller: EmployeeController
 });
 
-function EmployeeController($http, AuthService) {
+function EmployeeController($http, AuthService, IndexedDBService) {
     var $ctrl = this;
-    $http.get('data/employees.json')
-    .then(function(response) {
-        console.log('EmployeeController: employees.json response', response);
-        $ctrl.employees = response.data.employees;
-    })
-    .catch(function(error) {
-        console.error('Error fetching employee data:', error);
+    $ctrl.employees = [];
+
+    IndexedDBService.getEmployees().then(function(employees){
+        $ctrl.employees = employees;
+    }).catch(function(error){
+        console.error('Error fetching employees', error);
     });
+    
+    // $http.get('data/employees.json')
+    // .then(function(response) {
+    //     console.log('EmployeeController: employees.json response', response);
+    //     $ctrl.employees = response.data.employees;
+    // })
+    // .catch(function(error) {
+    //     console.error('Error fetching employee data:', error);
+    // });
+
+    loadEmployees();
+
+    function loadEmployees() {
+        IndexedDBService.getEmployees().then(function(employees){
+            $ctrl.employees = employees;
+        }).catch(function(error){
+            console.error('Error fetching employees', error);
+        });
+    }
 
     $ctrl.showDetails = function(employee) {
         $ctrl.selectedEmployee = employee;
@@ -33,13 +51,18 @@ function EmployeeController($http, AuthService) {
     }
 
     $ctrl.saveEmployee = function(updatedEmployee) {
-        for (var i = 0; i < $ctrl.employees.length; i++) {
-            if ($ctrl.employees[i].id === updatedEmployee.id) {
-                $ctrl.employees[i] = updatedEmployee;
-                break;
+        IndexedDBService.addEmployee(updatedEmployee).then(function(){
+            for (var i = 0; i < $ctrl.employees.length; i++) {
+                if ($ctrl.employees[i].id === updatedEmployee.id) {
+                    $ctrl.employees[i] = updatedEmployee;
+                    break;
+                }
             }
-        }
-        $ctrl.showEditForm = false;
+            $ctrl.showEditForm = false;
+        }).catch(function(error){
+            console.error('Error saving employee', error);
+        });
+
     };
 
     $ctrl.logout = function() {
