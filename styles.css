@@ -147,3 +147,80 @@ td,th{
     cursor: pointer;
 }
 
+/* Dashboard Form  */
+.modal {
+    display: block !important;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right:0;
+    bottom:0;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 10px;
+    background-color: white;
+    z-index: 1000;
+    
+}
+
+.modal-content {
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    width: 600px;
+    margin:auto;
+    border-radius: 5px;
+}
+
+.modal form {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 10px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.modal button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.modal button:hover {
+    opacity: 0.8;
+}
+
+.modal input[type=text], .modal input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* UI grid styling */
+
+.grid {
+    width: 80%;
+    margin: 20px auto;
+    height:fit-content; 
+}
+
+.ui-grid-header-cell-wrapper{
+    height:10%;
+}
+
+/* Chart Styling */
+
+#formsChart {
+    margin-top: 20px; /* Adjust as needed */
+    max-width: 80%; /* Adjust the width as per your layout */
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}

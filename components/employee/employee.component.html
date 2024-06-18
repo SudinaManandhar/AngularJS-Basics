@@ -39,44 +39,6 @@
   <employee-edit employee="$ctrl.selectedEmployee" on-save="$ctrl.saveEmployee(employee)"></employee-edit>
 </div>
 
-<div id="employeeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="employeeModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="employeeModalLabel">Employee Details</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <table class="table table-bordered">
-                  <tbody>
-                      <tr>
-                          <th scope="row">Name</th>
-                          <td>{{ $ctrl.selectedEmployee.name }}</td>
-                      </tr>
-                      <tr>
-                          <th scope="row">Address</th>
-                          <td>{{ $ctrl.selectedEmployee.address }}</td>
-                      </tr>
-                      <tr>
-                          <th scope="row">Contact</th>
-                          <td>{{ $ctrl.selectedEmployee.phone }}</td>
-                      </tr>
-                      <tr>
-                          <th scope="row">Email</th>
-                          <td>{{ $ctrl.selectedEmployee.email }}</td>
-                      </tr>
-                      <tr>
-                          <th scope="row">Position</th>
-                          <td>{{ $ctrl.selectedEmployee.position }}</td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-      </div>
-  </div>
-</div>
 
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->

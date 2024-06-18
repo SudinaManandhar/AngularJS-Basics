@@ -52,12 +52,11 @@ function EmployeeController($http, AuthService, IndexedDBService) {
 
     $ctrl.saveEmployee = function(updatedEmployee) {
         IndexedDBService.addEmployee(updatedEmployee).then(function(){
-            for (var i = 0; i < $ctrl.employees.length; i++) {
-                if ($ctrl.employees[i].id === updatedEmployee.id) {
-                    $ctrl.employees[i] = updatedEmployee;
-                    break;
-                }
-            }
+            // $ctrl.employees.forEach(function(emp, index) {
+            //     if (emp.id === updatedEmployee.id) {
+            //         $ctrl.employees[index] = updatedEmployee;
+            //     }
+            // });
             $ctrl.showEditForm = false;
         }).catch(function(error){
             console.error('Error saving employee', error);

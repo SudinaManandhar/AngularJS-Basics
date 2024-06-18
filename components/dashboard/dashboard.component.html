@@ -1,0 +1,94 @@
+<div ng-controller="DashboardController as $ctrl">
+    <h2>Dashboard</h2>
+    <button class = "btn1" ng-click="$ctrl.addForm()">Add New Form</button>
+    
+    <div ui-grid="$ctrl.gridOptions" class="grid"></div>
+
+    <div class="chartContainer">
+        <canvas id="formsChart" height="300"></canvas>
+    </div>
+    
+    <!-- <div class="row">
+        <div class="col">
+            <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item" ng-repeat="image in $ctrl.carouselImages" ng-class="{ active: $first }">
+                        <img class="d-block w-100" ng-src="{{ image.imageData }}" alt="Image {{ image.id }}">
+                    </div>
+                </div>
+                <a class="carousel-control-prev" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div> -->
+    
+    <hr>
+    <h6>Images Carousel</h6>
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item" ng-repeat="image in $ctrl.carouselImages" ng-class="{active: $first}">
+                <img ng-src="{{ image.imageData }}" class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Modal for adding form -->
+    <div class="modal" ng-if="$ctrl.showAddForm">
+        <div class="modal-content">
+            <form ng-submit="$ctrl.saveForm($ctrl.formData)" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-control" ng-model="$ctrl.formData.name" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Image</label>
+                    <input class="form-control" type="file" file-model="$ctrl.formData.image" accept="image/*">
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Gender</label><br>
+                    <label class="form-check-label">
+                        <input type="radio" ng-model="$ctrl.formData.category" value="Male"> Male
+                    </label><br>
+                    <label class="form-check-label">
+                        <input type="radio" ng-model="$ctrl.formData.category" value="Female"> Female
+                    </label><br>
+                    <label class="form-check-label">
+                        <input type="radio" ng-model="$ctrl.formData.category" value="Other"> Other
+                    </label>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Account Type</label><br>
+                    <label class="form-check-label">
+                        <input type="checkbox" ng-model="$ctrl.formData.option1" > Saving
+                    </label><br>
+                    <label class="form-check-label">
+                        <input type="checkbox" ng-model="$ctrl.formData.option2" > Checking
+                    </label><br>
+                    <label class="form-check-label">
+                        <input type="checkbox" ng-model="$ctrl.formData.option3" > Fixed Deposit
+                    </label>
+                </div>
+                <button class = "btn-primary" type="submit">Save</button>
+                <button class = "btn-secondary"ng-click="$ctrl.closeForm()">Close</button>
+            </form>
+            
+        </div>
+    </div>
+</div>

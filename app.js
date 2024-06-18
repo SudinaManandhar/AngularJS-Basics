@@ -1,4 +1,4 @@
-var app = angular.module('myApp', ['ngRoute']);
+var app = angular.module('myApp', ['ngRoute','ui.grid']);
 
 app.run(function(IndexedDBService, AuthService) {
     IndexedDBService.initDB().then(function() {
@@ -31,8 +31,18 @@ app.config(function($routeProvider, $locationProvider) {
     .when('/login', {
         template: '<login></login>'
     })
-    .when('/employees', {
-        template: '<employees></employees>',
+    // .when('/employees', {
+    //     template: '<employees></employees>',
+    //     resolve: {
+    //         auth: function($location, AuthService){
+    //             if(!AuthService.isAuthenticated()){
+    //                 $location.path('/login');
+    //             }
+    //         }
+    //     }
+    // })
+    .when('/dashboard', {
+        template: '<dashboard></dashboard>',
         resolve: {
             auth: function($location, AuthService){
                 if(!AuthService.isAuthenticated()){

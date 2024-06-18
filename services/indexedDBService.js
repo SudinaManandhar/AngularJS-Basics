@@ -5,7 +5,7 @@ angular.module('myApp').factory('IndexedDBService', function($q) {
     service.initDB = function() {
         var deferred = $q.defer();
 
-        var request = indexedDB.open('MyDatabase', 2);
+        var request = indexedDB.open('MyDatabase', 4);
 
         request.onupgradeneeded = function(event) {
             db = event.target.result;
@@ -19,7 +19,11 @@ angular.module('myApp').factory('IndexedDBService', function($q) {
             if (!db.objectStoreNames.contains('auth')) {
                 var authStore = db.createObjectStore('auth', { keyPath: 'id', autoIncrement: true });
             }
-
+            if(!db.objectStoreNames.contains('forms')){
+                var formStores = db.createObjectStore('forms',{ keyPath: 'id', autoIncrement: true});
+                //formsStore.createIndex('image', 'image', { unique: false });
+                //formsStore.createIndex('gender', 'gender', { unique: false });
+            }
         };
 
         request.onsuccess = function(event) {
@@ -48,6 +52,50 @@ angular.module('myApp').factory('IndexedDBService', function($q) {
         }
         return deferred.promise;
     }
+
+    //For Form data entry and fetching
+
+    service.addForm = function(form){
+        var deferred = $q.defer();
+        getDB().then(function(db){
+            var transaction = db.transaction(['forms'],'readwrite');
+            var store = transaction.objectStore('forms');
+            form.date = new Date(form.date).toISOString().split('T')[0];
+            var request = store.add(form);
+
+            request.onsuccess = function() {
+                deferred.resolve();
+            };
+
+            request.onerror = function(event) {
+                deferred.reject('Error adding form: ' + event.target.errorCode);
+            };
+        }).catch(function(error){
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
+    service.getForms = function(){
+        var deferred = $q.defer();
+        getDB().then(function(db){
+            var transaction = db.transaction(['forms'], 'readonly');
+            var store = transaction.objectStore('forms');
+            var request = store.getAll();
+
+            request.onsuccess = function(event) {
+                deferred.resolve(event.target.result);
+            };
+
+            request.onerror = function(event) {
+                deferred.reject('Error fetching forms: ' + event.target.errorCode);
+            };
+        }).catch(function(error){
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+    //To Authenticate users for login
 
     service.setAuthState = function(isAuthenticated) {
         return getDB().then(function(db){
@@ -89,24 +137,6 @@ angular.module('myApp').factory('IndexedDBService', function($q) {
         
     };
 
-    service.addUser = function(user) {
-        var deferred = $q.defer();
-
-        var transaction = db.transaction(['users'], 'readwrite');
-        var store = transaction.objectStore('users');
-        var request = store.add(user);
-
-        request.onsuccess = function() {
-            deferred.resolve();
-        };
-
-        request.onerror = function(event) {
-            deferred.reject('Error adding user: ' + event.target.errorCode);
-        };
-
-        return deferred.promise;
-    };
-
     service.getUsers = function() {
         return getDB().then(function(db){
             var deferred = $q.defer();
@@ -125,24 +155,6 @@ angular.module('myApp').factory('IndexedDBService', function($q) {
             return deferred.promise;
         })
         
-    };
-
-    service.addEmployee = function(employee) {
-        var deferred = $q.defer();
-        getDB().then(function(db){
-            var transaction = db.transaction(['employees'], 'readwrite');
-            var store = transaction.objectStore('employees');
-            var request = store.add(employee);
-
-            request.onsuccess = function() {
-                deferred.resolve();
-            };
-
-            request.onerror = function(event) {
-                deferred.reject('Error adding employee: ' + event.target.errorCode);
-            };
-        })
-        return deferred.promise;
     };
 
     service.getEmployees = function() {
@@ -185,3 +197,11 @@ angular.module('myApp').factory('IndexedDBService', function($q) {
 
     return service;
 });
+
+// .config(['ChartJsProvider', function (ChartJsProvider) {
+//     // Configure all charts
+//     ChartJsProvider.setOptions({
+//         chartColors: ['#FF5252', '#FF8A80'],
+//         responsive: true
+//     });
+// }]);

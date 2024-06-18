@@ -25,7 +25,7 @@ function LoginController($location, AuthService, IndexedDBService) {
             // });
             if(response.data.success){
                 console.log('User Found');
-                window.location = '#!/employees';
+                window.location = '#!/dashboard';
             } else{
                 $ctrl.error = "Invalid credentials";
             }
