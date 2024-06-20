@@ -147,6 +147,17 @@ td,th{
     cursor: pointer;
 }
 
+.heading{
+    margin-top: 2rem;
+    margin-left: 9rem;
+    text-align: left;
+}
+
+.add-btn, .buttons{
+    display: flex;
+    justify-content: center;
+}
+
 /* Dashboard Form  */
 .modal {
     display: block !important;
@@ -182,8 +193,16 @@ td,th{
     width: 80%;
 }
 
-.modal button {
+.modal button .btn .btn-primary {
     background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.modal button .btn .btn-secondary {
+    background-color:#6b6b6b;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -224,3 +243,29 @@ td,th{
     margin-right: auto;
     display: block;
 }
+
+
+/* Carousel Styling */
+
+.carousel-control-prev,
+.carousel-control-next {
+    filter: invert(1); 
+    height: 100%;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.carousel-control-prev-icon::before,
+.carousel-control-next-icon::before {
+    font-size: 2rem;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+

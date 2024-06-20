@@ -25,8 +25,17 @@ function DashboardController(AuthService, IndexedDBService){
     };
 
     $ctrl.carouselImages = [];
-
+    $ctrl.selectedImageIndex = 0;
     $ctrl.showAddForm = false;
+    $ctrl.formData = {};
+
+    document.querySelector('.carousel-control-prev').addEventListener('click', function(event) {
+        $('#carouselExample').carousel('prev');
+    }, { passive: true });
+    
+    document.querySelector('.carousel-control-next').addEventListener('click', function(event) {
+        $('#carouselExample').carousel('next');
+    }, { passive: true });
 
     $ctrl.addForm = function() {
         console.log('Add form button clicked');
@@ -39,27 +48,21 @@ function DashboardController(AuthService, IndexedDBService){
         $ctrl.showAddForm = false;
     };
 
+    function updateCarousel(forms) {
+        $ctrl.carouselImages = forms.map(function(form) {
+            return {
+                id: form.id,
+                imageData: form.image
+            };
+        });
+    }
+
     $ctrl.saveForm = function(formData){
         formData.date = new Date().toISOString().split('T')[0];
         
         var fileInput = document.querySelector('input[type="file"]');
         var file = fileInput.files[0];
-        if(file){
-            var reader = new FileReader();
-            reader.onload = function(e){
-                formData.image = e.target.result;
-                IndexedDBService.addForm(formData).then(function(){
-                    console.log('Form data saved to IndexedDB');
-                    $ctrl.showAddForm = false;
-                    $ctrl.loadForms();
-                    refreshGrid();
-                    updateFormsChart($ctrl.gridOptions.data);
-                }).catch(function(error){
-                    console.error('Error saving form data',error);
-                });
-            };
-            reader.readAsDataURL(file);
-        }
+
         formData.options = [];
         if ($ctrl.formData.option1) {
             formData.options.push('Saving');
@@ -71,20 +74,35 @@ function DashboardController(AuthService, IndexedDBService){
             formData.options.push('Fixed Deposit');
         }
 
+        function saveFormToIndexedDB(formData){
+            IndexedDBService.addForm(formData).then(function(){
+                console.log('Form data saved to IndexedDB');
+                $ctrl.showAddForm = false;
+                $ctrl.loadForms().then(function(forms){
+                    // refreshGrid(forms);
+                    updateFormsChart(forms);
+                    updateCarousel(forms);
+                });
+            }).catch(function(error){
+                console.error('Error saving form data',error);
+            });
+        }
+
+        if(file){
+            var reader = new FileReader();
+            reader.onload = function(e){
+                formData.image = e.target.result;
+                saveFormToIndexedDB(formData);
+            };
+            reader.readAsDataURL(file);
+        }else{
+            saveFormToIndexedDB(formData);
+        }
         console.log('Form data submitted');
-        IndexedDBService.addForm(formData).then(function(){
-            console.log('Form data saved to IndexedDB');
-            $ctrl.showAddForm = false;
-            $ctrl.loadForms();
-            refreshGrid();
-            updateFormsChart($ctrl.gridOptions.data);
-        }).catch(function(error){
-            console.error('Error saving form data',error);
-        });
     };
 
     $ctrl.loadForms = function() {
-        IndexedDBService.getForms().then(function(forms) {
+        return IndexedDBService.getForms().then(function(forms) {
             $ctrl.gridOptions.data = forms;
 
             $ctrl.carouselImages = forms.map(function(form) {
@@ -93,6 +111,10 @@ function DashboardController(AuthService, IndexedDBService){
                     imageData: form.image
                 };
             }); 
+
+            if ($ctrl.selectedImageIndex >= $ctrl.carouselImages.length) {
+                $ctrl.selectedImageIndex = 0; // Reset to the first image
+            }
 
             var dateCounts = forms.reduce(function(acc, form) {
                 var formDate = new Date(form.date).toISOString().split('T')[0];
@@ -106,14 +128,14 @@ function DashboardController(AuthService, IndexedDBService){
                 $ctrl.formsChart.data.labels = dates;
                 $ctrl.formsChart.data.datasets[0].data = counts;
                 $ctrl.formsChart.update();
+            }else{
+                updateFormsChart(forms);
+
             }
             
-        }).catch(function(error){
-            console.error('Error loading forms',error);
-        });
+            return forms;
+        })
     };
-
-    $ctrl.loadForms();
 
     function refreshGrid(){
         IndexedDBService.getForms().then(function(forms){
@@ -125,31 +147,36 @@ function DashboardController(AuthService, IndexedDBService){
                     imageData: form.image
                 };
             }); 
-        }).catch(function(error){
-            console.error('Error fetching forms from IndexedDB:', error);
         });
-    }
+        
+        };
 
-    $ctrl.getForms = function() {
-        IndexedDBService.getForms().then(function(forms){
-            $ctrl.gridOptions.data = forms;
-            updateFormsChart(forms); 
-        }).catch(function(error){
-            console.error('Error fetching forms:', error);
-        });
-    };
+    // $ctrl.getForms = function() {
+    //     IndexedDBService.getForms().then(function(forms){
+    //         $ctrl.gridOptions.data = forms;
+    //         if($ctrl.formsChart){
+    //             updateFormsChart(forms); 
+    //         }
+    //         updateFormsChart(forms);
+    //     }).catch(function(error){
+    //         console.error('Error fetching forms:', error);
+    //         // $ctrl.gridOptions.data = [];
+    //         if($ctrl.formsChart){
+    //             $ctrl.formsChart.destroy();
+    //         }
+    //     });
+    // };
 
-    $ctrl.getForms();
+    // $ctrl.getForms();
 
     function updateFormsChart(forms) {
         var ctx = document.getElementById('formsChart').getContext('2d');
-
         var data = processDataForChart(forms);
         
         if ($ctrl.formsChart) {
             $ctrl.formsChart.destroy();
         }
-
+    
         $ctrl.formsChart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -188,24 +215,32 @@ function DashboardController(AuthService, IndexedDBService){
 
         return data;
     }
-
+    
     function groupFormsByDay(forms) {
+
+        if (!forms || !Array.isArray(forms)) {
+            return [];
+        } 
+
         var groupedForms = [];
 
         forms.forEach(function(form) {
-            var date = new Date(form.date).toLocaleDateString();
+            var formDate = new Date(form.date).toLocaleDateString();
             var existingGroup = groupedForms.find(function(group) {
-                return group.date === date;
+                return group.date === formDate;
             });
 
             if (existingGroup) {
                 existingGroup.count++;
             } else {
-                groupedForms.push({ date: date, count: 1 });
+                groupedForms.push({ date: formDate, count: 1 });
             }
         });
 
         return groupedForms;
     }
-}
 
+    $ctrl.$onInit = function() {
+            $ctrl.loadForms();
+    };
+}

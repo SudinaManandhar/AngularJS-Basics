@@ -77,8 +77,8 @@ angular.module('myApp').factory('IndexedDBService', function($q) {
     }
 
     service.getForms = function(){
-        var deferred = $q.defer();
-        getDB().then(function(db){
+         return getDB().then(function(db){
+            var deferred = $q.defer();
             var transaction = db.transaction(['forms'], 'readonly');
             var store = transaction.objectStore('forms');
             var request = store.getAll();
@@ -90,10 +90,13 @@ angular.module('myApp').factory('IndexedDBService', function($q) {
             request.onerror = function(event) {
                 deferred.reject('Error fetching forms: ' + event.target.errorCode);
             };
+            return deferred.promise;
         }).catch(function(error){
-            deferred.reject(error);
+            console.log('IndexedDB ma error');
+            return $q.reject(error);
+            
         });
-        return deferred.promise;
+        
     }
     //To Authenticate users for login
 
@@ -197,11 +200,3 @@ angular.module('myApp').factory('IndexedDBService', function($q) {
 
     return service;
 });
-
-// .config(['ChartJsProvider', function (ChartJsProvider) {
-//     // Configure all charts
-//     ChartJsProvider.setOptions({
-//         chartColors: ['#FF5252', '#FF8A80'],
-//         responsive: true
-//     });
-// }]);

@@ -1,48 +1,38 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 <div ng-controller="DashboardController as $ctrl">
-    <h2>Dashboard</h2>
-    <button class = "btn1" ng-click="$ctrl.addForm()">Add New Form</button>
+    <h2 class = "heading">Dashboard</h2>
+
+    <div class="add-btn">
+        <button class = "btn1" ng-click="$ctrl.addForm()">Add New Form</button>
+    </div>
     
     <div ui-grid="$ctrl.gridOptions" class="grid"></div>
 
     <div class="chartContainer">
-        <canvas id="formsChart" height="300"></canvas>
+        <canvas id="formsChart" height="400" width="400"></canvas>
     </div>
-    
-    <!-- <div class="row">
-        <div class="col">
-            <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item" ng-repeat="image in $ctrl.carouselImages" ng-class="{ active: $first }">
-                        <img class="d-block w-100" ng-src="{{ image.imageData }}" alt="Image {{ image.id }}">
-                    </div>
-                </div>
-                <a class="carousel-control-prev" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
-        </div>
-    </div> -->
     
     <hr>
     <h6>Images Carousel</h6>
+
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item" ng-repeat="image in $ctrl.carouselImages" ng-class="{active: $first}">
-                <img ng-src="{{ image.imageData }}" class="d-block w-100" alt="...">
+                <img ng-src="{{ image.imageData }}" class="d-block w-100" alt="Image {{ image.id }}">
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+            <span class="sr-only">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+            <span class="sr-only">Next</span>
         </button>
     </div>
 
@@ -85,10 +75,21 @@
                         <input type="checkbox" ng-model="$ctrl.formData.option3" > Fixed Deposit
                     </label>
                 </div>
-                <button class = "btn-primary" type="submit">Save</button>
-                <button class = "btn-secondary"ng-click="$ctrl.closeForm()">Close</button>
+                <div class="buttons">
+                    <button class = "btn btn-primary" type="submit">Save</button>&nbsp;
+                    <button class = "btn btn-secondary" ng-click="$ctrl.closeForm()">Close</button>
+                </div>
             </form>
             
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#carouselExample').carousel();
+    });
+
+    
+    
+</script>
